@@ -1,6 +1,8 @@
 captioner.py: a simple application to add captions to the ImageDescription
 field of images' EXIF metadata.
 
+usage: $ python captioner.py <path-to-directory-with-images>
+
 For the time being the application simply copies the image with updated
 metadata from 'foo.jpg' to 'foo_captioned.jpg'.
 
@@ -16,3 +18,5 @@ kyle.donahue@gmail.com
 Changelog:
 v0.1 - initial version.  Supports command-line caption entry.
 v0.2 - added support for GUI caption entry, removed command-line entry.
+       Program now handles the window-close button properly and will
+       cleanly exit if no JPEG files are found inside the given directory.
