@@ -22,6 +22,11 @@ def updateImage(root, filename):
     root.label.image = tkimage
     root.label.pack()
 
+def waitForInput():
+    root.input_ready.wait()
+    root.input_ready.clear()
+    return root.entry.get()
+
 def CaptionApp(root, files):
     for infile in files:
 
@@ -37,14 +42,16 @@ def CaptionApp(root, files):
         root.event_generate("<<NextImage>>")
 
         # Get caption from command line and add it to the metadata.
-        print 'Enter a caption: '
-        comment = sys.stdin.readline()
+        comment = waitForInput()
+        root.entry.delete(0, Tkinter.END)
         source = pexif.JpegFile.fromFile(infile)
         source.exif.primary.ImageDescription = comment
 
         base_fname, ext = os.path.splitext(infile)
 
         source.writeFile(base_fname + "_captioned" + ext)
+
+    root.quit()
 
 if len(sys.argv) > 1:
     path = sys.argv[1]
@@ -56,8 +63,16 @@ files = glob.glob(path + '*.jpg')
 
 # Set up our window.
 root = Tkinter.Tk()
+root.input_ready = threading.Event()
 root.label = Tkinter.Label(root)
 root.label.pack()
+root.entry = Tkinter.Entry(root, width=50)
+root.entry.pack()
+root.button = Tkinter.Button(root,
+                             text='Ok',
+                             width=10,
+                             command=root.input_ready.set)
+root.button.pack()
 
 # Run the captioning thread.
 display = threading.Thread(target=CaptionApp, args=(root, files))

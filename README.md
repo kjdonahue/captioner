@@ -1,5 +1,5 @@
-captioner.py: a simple application to add captions to the title/subject field
-of images' EXIF metadata.
+captioner.py: a simple application to add captions to the ImageDescription
+field of images' EXIF metadata.
 
 For the time being the application simply copies the image with updated
 metadata from 'foo.jpg' to 'foo_captioned.jpg'.
